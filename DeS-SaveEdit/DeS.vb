@@ -4,10 +4,10 @@ Imports System.IO
 Public Class DeS
     Public Shared bytes() As Byte
     Public Shared folder
-    Public Shared filename
+    Public Shared filename, filename1
     Public Shared modified = False
     Public Shared manager As Ps3SaveManager
-    Public Shared file As Ps3File
+    Public Shared file0 As Ps3File
     Public Shared SecureID() As Byte = {&H1, &H23, &H45, &H67, &H89, &HAB, &HCD, &HEF, &HFE, &HDC, &HBA, &H98, &H76, &H54, &H32, &H10}
 
     Public Shared cllHairstyles() As UInteger
@@ -109,20 +109,39 @@ Public Class DeS
         Next
     End Sub
 
+    Dim dec, enc, crp As Boolean
+
     Private Sub btnDeSOpen_Click(sender As System.Object, e As System.EventArgs) Handles btnDeSOpen.Click
 
+        Dim name As String = folder & "\" & filename1
+
+        Dim fs1 As FileStream = System.IO.File.OpenRead(name)
+
+        dec = (fs1.ReadByte() = 0)
+        crp = enc = Not dec
+
+        fs1.Close()
 
         Try
-            filename = "PARAM.SFO"
-            bytes = System.IO.File.ReadAllBytes(txtDeSFolder.Text & "\" & filename)
+            If dec Then
 
-            txtProfNum.Text = bytes(&H570)
+                bytes = System.IO.File.ReadAllBytes(name)
 
-            manager = New Ps3SaveManager(txtDeSFolder.Text, SecureID)
-            filename = "1USER.DAT"
+            Else
 
-            file = manager.Files.FirstOrDefault(Function(t) t.PFDEntry.file_name = filename)
-            bytes = file.DecryptToBytes
+                'MsgBox("crypted")
+
+                bytes = System.IO.File.ReadAllBytes(txtDeSFolder.Text & "\" & "PARAM.SFO")
+
+                txtProfNum.Text = bytes(&H570)
+
+                manager = New Ps3SaveManager(txtDeSFolder.Text, SecureID)
+
+                file0 = manager.Files.FirstOrDefault(Function(t) t.PFDEntry.file_name = filename1)
+                bytes = file0.DecryptToBytes
+
+            End If
+
 
             txtWorld.Text = Convert.ToUInt16(bytes(&H4))
             txtBlock.Text = Convert.ToUInt16(bytes(&H5))
@@ -258,9 +277,14 @@ Public Class DeS
             System.IO.File.WriteAllBytes(txtDeSFolder.Text & "\" & filename, bytes)
 
 
-            filename = "1USER.DAT"
-            file = manager.Files.FirstOrDefault(Function(t) t.PFDEntry.file_name = filename)
-            bytes = file.DecryptToBytes
+            'filename = "1USER.DAT"
+            If crp Then
+                file0 = manager.Files.FirstOrDefault(Function(t) t.PFDEntry.file_name = filename1)
+                bytes = file0.DecryptToBytes
+            Else
+                bytes = System.IO.File.ReadAllBytes(folder & "\" & filename1)
+            End If
+
 
             bytes(&H4) = Val(txtWorld.Text)
             bytes(&H5) = Val(txtBlock.Text)
@@ -429,15 +453,20 @@ Public Class DeS
 
             bytes(&H1F965) = (bytes(&H1F965) And &HBF) Or &H40 * ((Not chkArchSealed.Checked) * -1)
 
-            file.Encrypt(bytes)
-            manager.ReBuildChanges()
-
+            If crp Then
+                file0.Encrypt(bytes)
+                manager.ReBuildChanges()
+            End If
 
 
 
             filename = "104USER.DAT"
-            file = manager.Files.FirstOrDefault(Function(t) t.PFDEntry.file_name = filename)
-            bytes = file.DecryptToBytes
+            If crp Then
+                file0 = manager.Files.FirstOrDefault(Function(t) t.PFDEntry.file_name = filename)
+                bytes = file0.DecryptToBytes
+            Else
+                bytes = System.IO.File.ReadAllBytes(folder & "\" & filename)
+            End If
 
             For i = 0 To &H10
                 If i < txtName.Text.Length Then
@@ -448,8 +477,10 @@ Public Class DeS
                 bytes(&H21D + i * 2 + 1) = 0
             Next
 
-            file.Encrypt(bytes)
-            manager.ReBuildChanges()
+            If crp Then
+                file0.Encrypt(bytes)
+                manager.ReBuildChanges()
+            End If
 
             MsgBox("Save Completed")
         Catch ex As Exception
@@ -466,6 +497,18 @@ Public Class DeS
     End Sub
     Private Sub txtDeSFile_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtDeSFolder.TextChanged
         folder = UCase(txtDeSFolder.Text)
+        ComboBox1.Items.Clear()
+        'Directory.EnumerateFiles(folder).Se
+        'ComboBox1.Items.AddRange(Directory.EnumerateFiles(folder).SelectMany(Of)) '.ToArray())
+        For Each file As String In System.IO.Directory.GetFiles(folder, "?USER.DAT")
+            ComboBox1.Items.Add(System.IO.Path.GetFileName(file))
+        Next
+        If File.Exists(folder & "\" & "USER.DAT") Then
+            ComboBox1.Items.Add("USER.DAT")
+        End If
+        'For Each file As String In System.IO.Directory.EnumerateFiles(folder, "*USER.DAT")
+        '    ComboBox1.Items.Add(System.IO.Path.GetFileName(file))
+        'Next
     End Sub
     Private Sub btnSendMoney_Click(sender As Object, e As EventArgs) Handles btnSendMoney.Click
         System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=D7UD87LN43ERN")
@@ -2686,6 +2729,11 @@ Handles dgvSpells.DefaultValuesNeeded
     End Sub
     Private Sub txt_DragEnter(sender As Object, e As System.Windows.Forms.DragEventArgs) Handles txtDeSFolder.DragEnter
         e.Effect = DragDropEffects.Copy
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        filename1 = ComboBox1.SelectedItem.ToString()
+        btnDeSOpen_Click(sender, e)
     End Sub
 End Class
 

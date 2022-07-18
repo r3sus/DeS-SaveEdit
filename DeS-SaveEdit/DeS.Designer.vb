@@ -77,6 +77,10 @@ Partial Class DeS
         Me.Label24 = New System.Windows.Forms.Label()
         Me.tabCtrl = New System.Windows.Forms.TabControl()
         Me.tabChar = New System.Windows.Forms.TabPage()
+        Me.Label51 = New System.Windows.Forms.Label()
+        Me.txtMiracleSlots = New System.Windows.Forms.TextBox()
+        Me.Label50 = New System.Windows.Forms.Label()
+        Me.txtSpellSlots = New System.Windows.Forms.TextBox()
         Me.cmbStartClass = New System.Windows.Forms.ComboBox()
         Me.Label47 = New System.Windows.Forms.Label()
         Me.Label36 = New System.Windows.Forms.Label()
@@ -147,10 +151,7 @@ Partial Class DeS
         Me.txtSoulMem = New System.Windows.Forms.TextBox()
         Me.txtProfNum = New System.Windows.Forms.TextBox()
         Me.Label25 = New System.Windows.Forms.Label()
-        Me.Label50 = New System.Windows.Forms.Label()
-        Me.txtSpellSlots = New System.Windows.Forms.TextBox()
-        Me.Label51 = New System.Windows.Forms.Label()
-        Me.txtMiracleSlots = New System.Windows.Forms.TextBox()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.tabCtrl.SuspendLayout()
         Me.tabChar.SuspendLayout()
         Me.TabEquipment.SuspendLayout()
@@ -688,6 +689,38 @@ Partial Class DeS
         Me.tabChar.TabIndex = 0
         Me.tabChar.Text = "Character"
         Me.tabChar.UseVisualStyleBackColor = True
+        '
+        'Label51
+        '
+        Me.Label51.AutoSize = True
+        Me.Label51.Location = New System.Drawing.Point(32, 339)
+        Me.Label51.Name = "Label51"
+        Me.Label51.Size = New System.Drawing.Size(67, 13)
+        Me.Label51.TabIndex = 80
+        Me.Label51.Text = "Miracle Slots"
+        '
+        'txtMiracleSlots
+        '
+        Me.txtMiracleSlots.Location = New System.Drawing.Point(102, 336)
+        Me.txtMiracleSlots.Name = "txtMiracleSlots"
+        Me.txtMiracleSlots.Size = New System.Drawing.Size(44, 20)
+        Me.txtMiracleSlots.TabIndex = 81
+        '
+        'Label50
+        '
+        Me.Label50.AutoSize = True
+        Me.Label50.Location = New System.Drawing.Point(43, 318)
+        Me.Label50.Name = "Label50"
+        Me.Label50.Size = New System.Drawing.Size(56, 13)
+        Me.Label50.TabIndex = 78
+        Me.Label50.Text = "Spell Slots"
+        '
+        'txtSpellSlots
+        '
+        Me.txtSpellSlots.Location = New System.Drawing.Point(102, 315)
+        Me.txtSpellSlots.Name = "txtSpellSlots"
+        Me.txtSpellSlots.Size = New System.Drawing.Size(44, 20)
+        Me.txtSpellSlots.TabIndex = 79
         '
         'cmbStartClass
         '
@@ -1372,43 +1405,20 @@ Partial Class DeS
         Me.Label25.TabIndex = 60
         Me.Label25.Text = "Profile #"
         '
-        'Label50
+        'ComboBox1
         '
-        Me.Label50.AutoSize = True
-        Me.Label50.Location = New System.Drawing.Point(43, 318)
-        Me.Label50.Name = "Label50"
-        Me.Label50.Size = New System.Drawing.Size(56, 13)
-        Me.Label50.TabIndex = 78
-        Me.Label50.Text = "Spell Slots"
-        '
-        'txtSpellSlots
-        '
-        Me.txtSpellSlots.Location = New System.Drawing.Point(102, 315)
-        Me.txtSpellSlots.Name = "txtSpellSlots"
-        Me.txtSpellSlots.Size = New System.Drawing.Size(44, 20)
-        Me.txtSpellSlots.TabIndex = 79
-        '
-        'Label51
-        '
-        Me.Label51.AutoSize = True
-        Me.Label51.Location = New System.Drawing.Point(32, 339)
-        Me.Label51.Name = "Label51"
-        Me.Label51.Size = New System.Drawing.Size(67, 13)
-        Me.Label51.TabIndex = 80
-        Me.Label51.Text = "Miracle Slots"
-        '
-        'txtMiracleSlots
-        '
-        Me.txtMiracleSlots.Location = New System.Drawing.Point(102, 336)
-        Me.txtMiracleSlots.Name = "txtMiracleSlots"
-        Me.txtMiracleSlots.Size = New System.Drawing.Size(44, 20)
-        Me.txtMiracleSlots.TabIndex = 81
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(581, 11)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(121, 21)
+        Me.ComboBox1.TabIndex = 61
         '
         'DeS
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1041, 710)
+        Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.Label25)
         Me.Controls.Add(Me.txtProfNum)
         Me.Controls.Add(Me.tabCtrl)
@@ -1575,5 +1585,5 @@ Partial Class DeS
     Friend WithEvents txtMiracleSlots As System.Windows.Forms.TextBox
     Friend WithEvents Label50 As System.Windows.Forms.Label
     Friend WithEvents txtSpellSlots As System.Windows.Forms.TextBox
-
+    Friend WithEvents ComboBox1 As ComboBox
 End Class

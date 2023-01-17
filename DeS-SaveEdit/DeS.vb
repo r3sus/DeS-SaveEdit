@@ -118,22 +118,21 @@ Public Class DeS
         Dim fs1 As FileStream = System.IO.File.OpenRead(name)
 
         dec = (fs1.ReadByte() = 0)
-        crp = enc = Not dec
+        crp = Not dec
 
         fs1.Close()
 
         Try
+
+            bytes = System.IO.File.ReadAllBytes(txtDeSFolder.Text & "\" & "PARAM.SFO")
+
+            txtProfNum.Text = bytes(&H570)
+
             If dec Then
 
                 bytes = System.IO.File.ReadAllBytes(name)
 
             Else
-
-                'MsgBox("crypted")
-
-                bytes = System.IO.File.ReadAllBytes(txtDeSFolder.Text & "\" & "PARAM.SFO")
-
-                txtProfNum.Text = bytes(&H570)
 
                 manager = New Ps3SaveManager(txtDeSFolder.Text, SecureID)
 
@@ -276,8 +275,8 @@ Public Class DeS
             bytes(&H570) = Val(txtProfNum.Text)
             System.IO.File.WriteAllBytes(txtDeSFolder.Text & "\" & filename, bytes)
 
-
             'filename = "1USER.DAT"
+
             If crp Then
                 file0 = manager.Files.FirstOrDefault(Function(t) t.PFDEntry.file_name = filename1)
                 bytes = file0.DecryptToBytes
@@ -456,6 +455,8 @@ Public Class DeS
             If crp Then
                 file0.Encrypt(bytes)
                 manager.ReBuildChanges()
+            Else
+                System.IO.File.WriteAllBytes(txtDeSFolder.Text & "\" & filename1, bytes)
             End If
 
 
@@ -480,6 +481,8 @@ Public Class DeS
             If crp Then
                 file0.Encrypt(bytes)
                 manager.ReBuildChanges()
+            Else
+                System.IO.File.WriteAllBytes(txtDeSFolder.Text & "\" & filename1, bytes)
             End If
 
             MsgBox("Save Completed")
@@ -500,12 +503,13 @@ Public Class DeS
         ComboBox1.Items.Clear()
         'Directory.EnumerateFiles(folder).Se
         'ComboBox1.Items.AddRange(Directory.EnumerateFiles(folder).SelectMany(Of)) '.ToArray())
-        For Each file As String In System.IO.Directory.GetFiles(folder, "?USER.DAT")
+        If (Not Directory.Exists(folder)) Then Return
+        For Each file As String In System.IO.Directory.GetFiles(folder, "*USER.DAT")
             ComboBox1.Items.Add(System.IO.Path.GetFileName(file))
         Next
-        If File.Exists(folder & "\" & "USER.DAT") Then
-            ComboBox1.Items.Add("USER.DAT")
-        End If
+        'If File.Exists(folder & "\" & "USER.DAT") Then
+        '    ComboBox1.Items.Add("USER.DAT")
+        'End If
         'For Each file As String In System.IO.Directory.EnumerateFiles(folder, "*USER.DAT")
         '    ComboBox1.Items.Add(System.IO.Path.GetFileName(file))
         'Next

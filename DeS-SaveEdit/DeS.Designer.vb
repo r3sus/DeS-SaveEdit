@@ -178,6 +178,7 @@ Partial Class DeS
         Me.txtDeSFolder.Name = "txtDeSFolder"
         Me.txtDeSFolder.Size = New System.Drawing.Size(440, 20)
         Me.txtDeSFolder.TabIndex = 0
+        Me.txtDeSFolder.Text = "STEP 1. PASTE PATH TO SAVE FOLDER OR BROWSE FOR IT"
         '
         'lblG1File
         '

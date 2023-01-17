@@ -1,5 +1,7 @@
 Hacky version supporting decrypted saves and eventually breaking on encrypted ones. Make backups. Download [here](./downloads/DeSEditor.exe).
 
+Valid save files are usually (1)USER.DAT. Any other could be selected, but might result error (in most cases). Original version modifies (1) with no options.  
+
 Alternative solution is using 010 editor with 
 [template by BuXXe](https://github.com/BuXXe/PARAM.PFD-PS3-Demons-Souls-Savegame-Tool/tree/master/Demons%20Souls/010%20Hex%20Editor%20Templates): [screenshot](./downloads/010Editor_DemonSouls.png).
 
